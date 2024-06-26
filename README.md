@@ -3,15 +3,17 @@ An app to find your favourite and top rated restuarants
 
 # Screenshot
 
-<img src="url to your image on imgur">
-<img src="url to your image on imgur">
+![Home page](/wireframes/Home%20page.png)
+![Restaurant details](/wireframes/Restaurant%20details.png)
+![My lists](/wireframes/My%20lists.png)
+![My foodie map](/wireframes/My%20Foodie%20map.png)
 
 # Technologies Used
 
 - Python
 - Django
 - AWS S3
-- Heroku
+- Render
 - Google Places Api
 - HTML
 - CSS
@@ -23,7 +25,7 @@ An app to find your favourite and top rated restuarants
 - Trello Board: https://trello.com/b/rmQw5OSe/application-progression-board
 - Pitch Deck Link: 
 - ERD
-- Wireframes:
+- Wireframes: https://www.figma.com/design/GxsF8ygOY6QuglxqYBDaF7/Foodie_list?node-id=1-2&t=xKMlIpqdJQIq5dA3-1
 
 # Next Steps
 

@@ -22,5 +22,8 @@ autocomplete.addListener('place_changed', function(place) {
     console.log(place)
 const result = autocomplete.getPlace()
 console.log(result)
+const placeId = result.place_id
+console.log("this is" + placeId);
 }) 
+
 }

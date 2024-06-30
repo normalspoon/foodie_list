@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+
   }
   
   body {
@@ -17,19 +18,24 @@
   header{
     width: 100%;
     position: fixed;
+
   }
   main {
     flex: 1; /* Allow the main content to grow and take up remaining space */
     padding-top: 159px;
     padding-bottom: 153px;
   }
-  
+  p{
+    color: #BBBBBB;
+  }
   
   i {
     margin-right: 10px;
   }
   /*----------bootstrap-navbar-css------------*/
-  
+  a{
+    text-decoration: none;
+  }
   a:hover{
     color: #FECC4E;
     text-decoration: none;
@@ -39,7 +45,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-  
+    margin: 0 10px;
   
   }
   .navbar-brand {
@@ -58,10 +64,7 @@
   }
   .navbar-img {
     display: inline-block;
-  
-    height: 64px;
-    /* width:64px; */
-  
+    height: 64px;  
   }
   .navbar-mainbg {
     padding: 0px;
@@ -113,6 +116,7 @@
     justify-content: flex-end;
     align-items: center;
     margin: 10px 0;
+    color: white;
   }
   
   footer .social_icon li{
@@ -130,16 +134,11 @@
     color: white;
   }
   
-  
-  p {
-    color: white;
+
+  .copyright {
     text-align: center;
     margin-top: 15px;
     margin-bottom: 10px;
-    font-size: 1.1em;
-  }
-  
-  .copyright {
     color: white;
     font-size:0.8em;
   }

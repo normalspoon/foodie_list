@@ -19,3 +19,9 @@ def signup(request):
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+def myLists(request):
+  return render(request, 'myLists.html')
+
+def myMap(request):
+  return render(request, 'myMap.html')

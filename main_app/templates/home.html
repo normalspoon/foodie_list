@@ -1,13 +1,13 @@
-{% load static %}
 
-<h1>testing!!!!</h1>
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Home</h1>
+
 
 <form>
     <input id="pac-input" type="text"> 
 </form>
-
-
-
 
 
 <script src="{% static 'js/home.js' %}"></script>
@@ -17,3 +17,5 @@
 
     
 </script>
+
+{% endblock %}

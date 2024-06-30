@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    color: black;
   }
   
   body {
@@ -23,13 +24,17 @@
     padding-top: 159px;
     padding-bottom: 153px;
   }
-  
+  p{
+    color: #BBBBBB;
+  }
   
   i {
     margin-right: 10px;
   }
   /*----------bootstrap-navbar-css------------*/
-  
+  a{
+    text-decoration: none;
+  }
   a:hover{
     color: #FECC4E;
     text-decoration: none;
@@ -130,16 +135,11 @@
     color: white;
   }
   
-  
-  p {
-    color: white;
+
+  .copyright {
     text-align: center;
     margin-top: 15px;
     margin-bottom: 10px;
-    font-size: 1.1em;
-  }
-  
-  .copyright {
     color: white;
     font-size:0.8em;
   }

@@ -1,0 +1,75 @@
+
+/* log in page */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    color: black;
+  }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure body takes up at least the full viewport height */
+    margin: 0;
+    background-color: #FFFCF4;
+  }
+
+  p{
+    color: #BBBBBB;
+  }
+
+.btn-primary{
+    background-color: #F36038;
+    border-color:#F36038;
+    --bs-btn-hover-bg: #de5935;
+    --bs-btn-hover-border-color: #de5935;
+    --bs-btn-active-bg: #c75030;
+    --bs-btn-active-border-color: #c75030;
+}
+
+.login-container {
+    display: flex;
+    height: 100vh;
+    padding: 0;
+    position: relative;
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+.login-form h1 {
+    margin-bottom: 20px;
+
+}
+
+.login-form p {
+    margin-top: 20px;
+
+}
+
+.login-form input {
+    margin-bottom: 10px;
+}
+.login-image {
+    background: url('/static/foodie_logo_nobackground.png') no-repeat center center;
+    background-size: contain;
+
+}
+
+.login-image h1{
+    
+    position: absolute;
+    bottom: 10rem;
+    text-align: center;
+
+}
+
+
+

@@ -6,3 +6,4 @@ __pycache__/
 db.sqlite3
 media
 .env
+foodie_list_app/__pycache__/settings.cpython-311.pyc

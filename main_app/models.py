@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Profile(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
   
   
 class Restaurant(models.Model):
@@ -15,5 +13,11 @@ class Restaurant(models.Model):
    rating = models.DecimalField()
 
 
-# class Review(models.Model):
-  
+
+class Review(models.Model):
+  comments = models.CharField(max_length=50)
+  img_url = models.CharField(max_length=200)
+  stars = models.IntegerField()
+   
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)

@@ -33,3 +33,10 @@ def places_details(request, place_id):
     'api_key': api_key,
   }
   return render(request, 'restaurants/detail.html', context)
+
+
+def myLists(request):
+  return render(request, 'myLists.html')
+
+def myMap(request):
+  return render(request, 'myMap.html')

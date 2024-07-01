@@ -1,0 +1,9 @@
+{% load static %}
+
+
+<h1>Restaurant Details</h1>
+<h2 id="details">{{ place_details.name }}</h2>
+<div id="details">{{ place_details.formatted_address }}</div>
+
+
+<script src="{% static 'js/detail.js' %}"></script>

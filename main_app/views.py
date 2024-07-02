@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .models import Review, Restaurant
@@ -47,10 +49,11 @@ def places_details(request, place_id):
     'place_details': place_details, 'review_form': review_form
     })
 
-
+@login_required
 def myLists(request):
   return render(request, 'myLists.html')
 
+@login_required
 def myMap(request):
   return render(request, 'myMap.html')
 
@@ -58,7 +61,7 @@ def myMap(request):
 class ReviewList(ListView):
   model = Review
 
-class ReviewCreate(CreateView):
+class ReviewCreate(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['comments', 'img_url', 'stars']
     template_name = 'restaurants/review_form.html'
@@ -73,10 +76,10 @@ class ReviewCreate(CreateView):
     def get_success_url(self):
         return reverse_lazy('places_details', kwargs={'place_id': self.kwargs['place_id']})
   
-class ReviewUpdate(UpdateView):
+class ReviewUpdate(LoginRequiredMixin, UpdateView):
   model = Review
   fields = ['comments', 'img_url', 'stars']
   
-class ReviewDelete(DeleteView):
+class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review
   success_url = '/home'

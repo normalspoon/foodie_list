@@ -19,9 +19,11 @@ class Restaurant(models.Model):
 
 
 class Review(models.Model):
-  comments = models.CharField(max_length=50)
+  RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+  
+  comments = models.TextField()
   img_url = models.CharField(max_length=200)
-  stars = models.IntegerField()
+  stars = models.IntegerField(choices=RATING_CHOICES)
    
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)

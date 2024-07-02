@@ -1,11 +1,52 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
 
-<h1>Restaurant Details</h1>
+
 <h2 id="details">{{ place_details.name }}</h2>
 <div id="details">{{ place_details.formatted_address }}</div>
+<br>
+<br>
+<div class='container'>
+  <div class="row">
+    <div class="col-sm-5 col-md-6">
+      <!-- {% csrf_token %} -->
+      <form method="POST">
+        <!-- {{ review_form.as_p }} -->
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Rate the restaurant</option>
+          <option value="1">1 star</option>
+          <option value="2">2 stars</option>
+          <option value="3">3 stars</option>
+          <option value="4">4 stars</option>
+          <option value="5">5 stars</option>
+        </select>
+        <br>
+        <div class="form-floating">
+          
+          <textarea class="form-control" placeholder="Leave a review here" id="floatingTextarea"></textarea>
+          <label for="floatingTextarea">Leave a review here</label>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-secondary">Upload Photo</button>
+        <input type="submit" class="btn btn-primary" value="Leave a Review">
+      </form>
+    </div>
+    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+      <p>placeholder for photos or map</p>
+    </div>
+  </div>
+  <br>
+  <hr>
+  <div class="row">
+    <div class="col-sm-5 col-md-6">
+      <p>placeholder for all reviews</p>
+    </div>
+  </div>
+</div>
 
-<a href="{% url 'reviews_create' place_id=place_details.place_id %}">
-  <button>Leave a Review</button>
-</a>
+
 
 <script src="{% static 'js/detail.js' %}"></script>
+
+{% endblock %}

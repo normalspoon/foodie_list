@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from decouple import config
+from .models import Restaurant
 import requests
 
 # Create your views here.
@@ -30,10 +31,27 @@ def places_details(request, place_id):
   response = requests.get(place_details_url)
   place_details = response.json().get('result', {})
 
+  name= place_details.get('name')
+  address= place_details.get('formatted_address')
+  location= place_details.get('geometry').get('location')
+  rating= place_details.get('rating')
+
+  restaurant, created = Restaurant.objects.get_or_create(
+    place_id=place_id,
+    defaults={
+      'name': name, 
+      'address': address, 
+      'location': location, 
+      'rating': rating
+    }
+  )
   context = {
     'place_details': place_details,
     'api_key': api_key,
+    'restaurant': restaurant,
   }
+
+   
   return render(request, 'restaurants/detail.html', context)
 
 

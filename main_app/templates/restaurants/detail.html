@@ -1,9 +1,11 @@
 {% load static %}
 
-
 <h1>Restaurant Details</h1>
 <h2 id="details">{{ place_details.name }}</h2>
 <div id="details">{{ place_details.formatted_address }}</div>
 
+<a href="{% url 'reviews_create' place_id=place_details.place_id %}">
+  <button>Leave a Review</button>
+</a>
 
 <script src="{% static 'js/detail.js' %}"></script>

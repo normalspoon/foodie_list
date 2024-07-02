@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .models import Review, Restaurant
+from .forms import ReviewForm
 from django.urls import reverse_lazy
 from decouple import config
 import requests
@@ -38,7 +39,13 @@ def places_details(request, place_id):
     'place_details': place_details,
     'api_key': api_key,
   }
-  return render(request, 'restaurants/detail.html', context)
+  
+  # add review form
+  review_form = ReviewForm()
+  
+  return render(request, 'restaurants/detail.html', {
+    'place_details': place_details, 'review_form': review_form
+    })
 
 
 def myLists(request):

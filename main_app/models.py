@@ -10,7 +10,7 @@ class Restaurant(models.Model):
    address = models.TextField()
    location = models.CharField(max_length=300)
    rating = models.DecimalField(decimal_places=1, max_digits=2)
-   place_id = models.CharField(max_length=100, unique=True)
+   
   
    def __str__(self):
      return self.name

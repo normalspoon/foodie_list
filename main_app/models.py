@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
   
 class Restaurant(models.Model):
+   place_id = models.CharField(primary_key=True, max_length=50)
    name = models.CharField(max_length=50)
    address = models.TextField()
    location = models.CharField(max_length=300)

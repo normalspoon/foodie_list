@@ -9,6 +9,7 @@ from .models import Review, Restaurant
 from .forms import ReviewForm
 from django.urls import reverse_lazy
 from decouple import config
+from .models import Restaurant
 import requests
 
 # Create your views here.
@@ -37,10 +38,26 @@ def places_details(request, place_id):
   response = requests.get(place_details_url)
   place_details = response.json().get('result', {})
 
+  name= place_details.get('name')
+  address= place_details.get('formatted_address')
+  location= place_details.get('geometry').get('location')
+  rating= place_details.get('rating')
+
+  restaurant, created = Restaurant.objects.get_or_create(
+    place_id=place_id,
+    defaults={
+      'name': name, 
+      'address': address, 
+      'location': location, 
+      'rating': rating
+    }
+  )
   context = {
     'place_details': place_details,
     'api_key': api_key,
+    'restaurant': restaurant,
   }
+
   
   # add review form
   review_form = ReviewForm()
@@ -48,6 +65,7 @@ def places_details(request, place_id):
   return render(request, 'restaurants/detail.html', {
     'place_details': place_details, 'review_form': review_form
     })
+
 
 @login_required
 def myLists(request):

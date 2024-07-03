@@ -1,16 +1,13 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <h2 id="details">{{ place_details.name }}</h2>
 <div id="details">{{ place_details.formatted_address }}</div>
-<br>
-<br>
-<div class='container'>
+<br />
+<br />
+<div class="container">
   <div class="row">
     <div class="col-sm-5 col-md-6">
-      <!-- {% csrf_token %} -->
+      {% csrf_token %}
       <form method="POST">
         <!-- {{ review_form.as_p }} -->
         <select class="form-select" aria-label="Default select example">
@@ -21,31 +18,32 @@
           <option value="4">4 stars</option>
           <option value="5">5 stars</option>
         </select>
-        <br>
+        <br />
         <div class="form-floating">
-          
-          <textarea class="form-control" placeholder="Leave a review here" id="floatingTextarea"></textarea>
+          <textarea
+            class="form-control"
+            placeholder="Leave a review here"
+            id="floatingTextarea"
+          ></textarea>
           <label for="floatingTextarea">Leave a review here</label>
         </div>
-        <br>
+        <br />
         <button type="submit" class="btn btn-secondary">Upload Photo</button>
-        <input type="submit" class="btn btn-primary" value="Leave a Review">
+        <input type="submit" class="btn btn-primary" value="Leave a Review" />
       </form>
     </div>
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <p>placeholder for photos or map</p>
     </div>
   </div>
-  <br>
-  <hr>
+  <br />
+  <hr />
   <div class="row">
     <div class="col-sm-5 col-md-6">
       <p>placeholder for all reviews</p>
     </div>
   </div>
 </div>
-
-
 
 <script src="{% static 'js/detail.js' %}"></script>
 

@@ -82,7 +82,7 @@ class ReviewList(ListView):
 class ReviewCreate(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['comments', 'img_url', 'stars']
-    template_name = 'restaurants/review_form.html'
+    template_name = 'restaurants/detail.html'
 
     def form_valid(self, form):
         place_id = self.kwargs['place_id']

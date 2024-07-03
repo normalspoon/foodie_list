@@ -9,12 +9,13 @@
     <div class="col-sm-5 col-md-6">
       <form method="POST">
         {% csrf_token %}
-        <!-- {{ review_form.as_p }} -->
+
         <select
           class="form-select"
           name="rating"
           aria-label="Default select example"
         >
+
           <option selected>Rate the restaurant</option>
           <option value="1">1 star</option>
           <option value="2">2 stars</option>

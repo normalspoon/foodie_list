@@ -10,4 +10,8 @@ urlpatterns = [
     path('details/<str:place_id>/', views.places_details, name='places_details'),
     path('myLists/', views.myLists, name='myLists'),
     path('myMap/', views.myMap, name='myMap'),
+    # path('reviews/', views.ReviewList.as_view(), name='places_details'),
+    path('reviews/create/<str:place_id>/', views.ReviewCreate.as_view(), name='reviews_create'),
+    path('reviews/<int:pk>/update/', views.ReviewUpdate.as_view(), name='reviews_update'),
+    path('reviews/<int:pk>/delete/', views.ReviewDelete.as_view(), name='reviews_delete'),
 ]

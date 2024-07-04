@@ -26,6 +26,8 @@ class Review(models.Model):
   comments = models.TextField()
   img_url = models.CharField(max_length=200)
   stars = models.IntegerField(choices=RATING_CHOICES)
+  created_at = models.DateTimeField(auto_now_add=True)
+   
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
   

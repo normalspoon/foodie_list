@@ -11,13 +11,9 @@
       <form method="POST">
         {% csrf_token %}
 
-        <select
-          class="form-select"
-          name="rating"
-          aria-label="Default select example"
-        >
-          <option selected>Rate the restaurant</option>
-          xs
+        <select class="form-select" name="rating" aria-label="Default select example">
+
+          <option selected>Rate the restaurant</option>xs
           <option value="1">1 star</option>
           <option value="2">2 stars</option>
           <option value="3">3 stars</option>
@@ -26,12 +22,8 @@
         </select>
         <br />
         <div class="form-floating">
-          <textarea
-            class="form-control"
-            name="review"
-            placeholder="Leave a review here"
-            id="floatingTextarea"
-          ></textarea>
+          <textarea class="form-control" name="review" placeholder="Leave a review here"
+            id="floatingTextarea"></textarea>
           <label for="floatingTextarea">Leave a review here</label>
         </div>
         <br />
@@ -58,26 +50,49 @@
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <div id="map" style="height: 400px; width: 100%"></div>
     </div>
-  </div>
-  <br />
+  </div><br />
+
+  <h3 id="details">Reviews</h3>
+
   <hr />
-  <div class="row">
-    <div class="col-sm-5 col-md-6 review">
-      {% if restaurant.review_set.all %}
-        {% for review in restaurant.review_set.all %} 
-        <div class="review-container" style="border: 1px solid #bebebe; padding: 10px;">
-          <div class="review-user"> {{review.user.username}}</div>
-          <div class="review-rating"> {{review.stars}} stars</div>
-          <div class="review-comment"> {{review.comments}}</div>
-          <div class="review-img"> <img src="{{ review.img_url }}" style="max-width: 200px; height: 100px;"></div>
+  {% if restaurant.review_set.all %}
+  <div class="card mb-3" style="max-width: 1000px;">
+    {% for review in restaurant.review_set.all %}
+    <div class="card">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{ review.img_url }}" class="img-fluid rounded-start" alt="image">
         </div>
-        <br />
-        {% endfor %}
-      {% else %}
-        <div>No reviews available.</div>
-      {% endif %}
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="review">
+              <div class="avatar">{{ review.user.username|slice:":2"|upper }}</div>
+
+              <div class="star-rating-display">
+                {% for i in "12345" %}
+                {% if i|add:"0" <= review.stars %} <span class="star filled">★</span>
+                  {% else %}
+                  <span class="star">★</span>
+                  {% endif %}
+                  {% endfor %}
+              </div>
+
+              <p><small class="text-muted card-text">{{review.created_at|date:"d M Y h:i A"}}</small></p>
+              <p class="card-text">{{review.comments}}</p>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
     </div>
+
+    {% endfor %}
+    {% else %}
+    <h5 class="card-title">No reviews available.</h5>
+    {% endif %}
   </div>
+
 </div>
 
 <script>
@@ -135,6 +150,7 @@
 
     const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
 
+
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
@@ -147,15 +163,20 @@
 
 
 
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
-    title: "restaurant",
-  });
+    const marker = new AdvancedMarkerElement({
+      map: map,
+      position: position,
+      title: "restaurant",
+    });
 }
+
+
+    initMap();
+  </script>
 
 
   initMap();
 </script>
 
-{% endblock %}
+
+  {% endblock %}

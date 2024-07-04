@@ -48,6 +48,7 @@ def places_details(request, place_id):
   location= place_details.get('geometry').get('location')
   opening_hours= place_details.get('current_opening_hours')
   photos= place_details.get('photos', [])
+
   print(photos)
    # I dont think we need google places rating?
   # rating= place_details.get('rating') 

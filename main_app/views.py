@@ -73,26 +73,13 @@ def places_details(request, place_id):
       'photo_url': photo_url,
       # 'rating': rating
     }
-  )
-  
-    # add review form
+  )  
+  # add review form
   review_form = ReviewForm()
-  
-  context = {
-    'place_details': place_details,
-    'api_key': api_key,
-    'restaurant': restaurant,
-    'review_form': review_form
-  }
 
- 
-    
-
-  
-
-  return render(request, 'restaurants/detail.html', context)
-
-
+  return render(request, 'restaurants/detail.html', {
+    'place_details': place_details, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
+    })
 
 @login_required
 def myLists(request):

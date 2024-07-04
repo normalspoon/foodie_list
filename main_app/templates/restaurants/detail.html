@@ -46,8 +46,20 @@
   <br />
   <hr />
   <div class="row">
-    <div class="col-sm-5 col-md-6">
-      <p>placeholder for all reviews</p>
+    <div class="col-sm-5 col-md-6 review">
+      {% if restaurant.review_set.all %}
+        {% for review in restaurant.review_set.all %} 
+        <div class="review-container" style="border: 1px solid #bebebe; padding: 10px;">
+          <div class="review-user"> {{review.user.username}}</div>
+          <div class="review-rating"> {{review.stars}} stars</div>
+          <div class="review-comment"> {{review.comments}}</div>
+          <div class="review-img"> <img src="{{ review.img_url }}" style="max-width: 200px; height: 100px;"></div>
+        </div>
+        <br />
+        {% endfor %}
+      {% else %}
+        <div>No reviews available.</div>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -87,9 +99,7 @@ async function initMap() {
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,
-
     title: "restaurant",
-
   });
 }
 

@@ -30,4 +30,4 @@ class Review(models.Model):
   
   def __str__(self):
     return f"Review by {self.user.username} for {self.restaurant.name}"
-  
+    return f"{self.stars} stars and comments {self.comments}"

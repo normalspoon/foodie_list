@@ -14,7 +14,12 @@ import requests
 
 # Create your views here.
 def home(request):
-  return render(request, 'home.html')
+  restaurants = Restaurant.objects.all()
+  context = {
+    'restaurants': restaurants
+    }
+  
+  return render(request, 'home.html', context)
 
 def signup(request):
   error_message = ''
@@ -41,30 +46,50 @@ def places_details(request, place_id):
   name= place_details.get('name')
   address= place_details.get('formatted_address')
   location= place_details.get('geometry').get('location')
-  rating= place_details.get('rating')
-
+  opening_hours= place_details.get('current_opening_hours')
+  photos= place_details.get('photos', [])
+  print(photos)
+   # I dont think we need google places rating?
+  # rating= place_details.get('rating') 
+  
+  photo_reference = None
+  photo_url = None
+  
+  if photos:
+  # the first photo in the photos
+    photo_reference = photos[0].get('photo_reference')
+    photo_url = f'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photo_reference}&key={api_key}'
+  
+  
+  
   restaurant, created = Restaurant.objects.get_or_create(
     place_id=place_id,
     defaults={
       'name': name, 
       'address': address, 
       'location': location, 
-      'rating': rating
+      'opening_hours': opening_hours,
+      'photo_reference': photo_reference,
+      'photo_url': photo_url,
+      # 'rating': rating
     }
   )
+  
+    # add review form
+  review_form = ReviewForm()
+  
   context = {
     'place_details': place_details,
     'api_key': api_key,
     'restaurant': restaurant,
+    'review_form': review_form
   }
 
+ 
+    
+
   
-  # add review form
-  review_form = ReviewForm()
-  
-  return render(request, 'restaurants/detail.html', {
-    'place_details': place_details, 'review_form': review_form
-    })
+  return render(request, 'restaurants/detail.html', context)
 
 
 @login_required

@@ -7,10 +7,9 @@ from django.contrib.auth.models import User
 class Restaurant(models.Model):
    place_id = models.CharField(primary_key=True, max_length=50)
    name = models.CharField(max_length=50)
-   address = models.TextField()
+   address = models.TextField(max_length = 200)
    location = models.CharField(max_length=300)
-   rating = models.DecimalField(decimal_places=1, max_digits=2)
-   
+   photo_url = models.CharField(max_length=200, default='')
   
    def __str__(self):
      return self.name

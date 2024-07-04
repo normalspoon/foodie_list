@@ -2,14 +2,35 @@
 {% load static %}
 {% block content %}
 
-<h1>Home</h1>
+
 
 
 <form>
-    <input id="pac-input" type="text"> 
+    <input id="pac-input" class="form-control mr-sm-2" type="text">
+    <button type="submit" class="btn btn-secondary" id="search-btn">Search</button>
 </form>
+<br>
 
-<div id="details"></div>
+<h3>Foodie's choice</h3>
+<br>
+<div id="details" class="row row-cols-1 row-cols-md-4 g-5">
+    {% for restaurant in restaurants %}
+    <a href="{% url 'places_details' restaurant.place_id %}">
+        <div class="col mb-4 h-100">
+            <div class="card h-100">
+                <img src="{{ restaurant.photo_url }}" class="card-img-top" alt="restaurant cover">
+                <div class="card-body">
+                    <h5 class="card-title">{{ restaurant.name }}</h5>
+                    <p class="card-text">{{ restaurant.opening_hours }}</p>
+                    <p class="card-text">{{ restaurant.address }}</p>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+
 
 
 
@@ -18,7 +39,7 @@
 <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap">
 
-    
-</script>
+
+    </script>
 
 {% endblock %}

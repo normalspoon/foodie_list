@@ -11,11 +11,7 @@
       <form method="POST">
         {% csrf_token %}
 
-        <select
-          class="form-select"
-          name="rating"
-          aria-label="Default select example"
-        >
+        <select class="form-select" name="rating" aria-label="Default select example">
 
           <option selected>Rate the restaurant</option>xs
           <option value="1">1 star</option>
@@ -26,12 +22,8 @@
         </select>
         <br />
         <div class="form-floating">
-          <textarea
-            class="form-control"
-            name="review"
-            placeholder="Leave a review here"
-            id="floatingTextarea"
-          ></textarea>
+          <textarea class="form-control" name="review" placeholder="Leave a review here"
+            id="floatingTextarea"></textarea>
           <label for="floatingTextarea">Leave a review here</label>
         </div>
         <br />
@@ -42,68 +34,89 @@
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <div id="map" style="height: 400px; width: 100%;"></div>
     </div>
-  </div>
-  <br />
+  </div><br />
+
+  <h3 id="details">Reviews</h3>
+
   <hr />
-  <div class="row">
-    <div class="col-sm-5 col-md-6 review">
-      {% if restaurant.review_set.all %}
-        {% for review in restaurant.review_set.all %} 
-        <div class="review-container" style="border: 1px solid #bebebe; padding: 10px;">
-          <div class="review-user"> {{review.user.username}}</div>
-          <div class="review-rating"> {{review.stars}} stars</div>
-          <div class="review-comment"> {{review.comments}}</div>
-          <div class="review-img"> <img src="{{ review.img_url }}" style="max-width: 200px; height: 100px;"></div>
+  {% if restaurant.review_set.all %}
+  <div class="card mb-3" style="max-width: 1000px;">
+    {% for review in restaurant.review_set.all %}
+    <div class="card">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{ review.img_url }}" class="img-fluid rounded-start" alt="image">
         </div>
-        <br />
-        {% endfor %}
-      {% else %}
-        <div>No reviews available.</div>
-      {% endif %}
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="review">
+              <div class="avatar">{{ review.user.username|slice:":2"|upper }}</div>
+
+              <div class="star-rating-display">
+                {% for i in "12345" %}
+                {% if i|add:"0" <= review.stars %} <span class="star filled">★</span>
+                  {% else %}
+                  <span class="star">★</span>
+                  {% endif %}
+                  {% endfor %}
+              </div>
+
+              <p><small class="text-muted card-text">{{review.created_at|date:"d M Y h:i A"}}</small></p>
+              <p class="card-text">{{review.comments}}</p>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
     </div>
+
+    {% endfor %}
+    {% else %}
+    <h5 class="card-title">No reviews available.</h5>
+    {% endif %}
   </div>
-</div>
+  <script>
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+      key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
+      v: "weekly",
+      // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+      // Add other bootstrap parameters as needed, using camel case.
+    });
+  </script>
 
-<script>
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
-    v: "weekly",
-    // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
-    // Add other bootstrap parameters as needed, using camel case.
-  });
-</script>
-
-<script async
+  <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap">
-    
-</script>
 
-<script>
-let map;
+    </script>
 
-async function initMap() {
+  <script>
+    let map;
 
-  const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
+    async function initMap() {
 
-  const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      const position = { lat: {{ place_details.geometry.location.lat }
+    }, lng: { { place_details.geometry.location.lng } } };
 
-
-  map = new Map(document.getElementById("map"), {
-    zoom: 14,
-    center: position,
-    mapId: "restaurant",
-  });
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
 
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
-    title: "restaurant",
-  });
+    map = new Map(document.getElementById("map"), {
+      zoom: 14,
+      center: position,
+      mapId: "restaurant",
+    });
+
+
+    const marker = new AdvancedMarkerElement({
+      map: map,
+      position: position,
+      title: "restaurant",
+    });
 }
 
-initMap();
-</script>
+    initMap();
+  </script>
 
-{% endblock %}
+  {% endblock %}

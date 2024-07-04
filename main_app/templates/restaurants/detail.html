@@ -45,8 +45,8 @@
       {% endfor %}
       <form
         action="{% url 'add_photo' restaurant.place_id %}"
-        enctype="multipart/form-data"
         method="POST"
+        enctype="multipart/form-data"
         class="card-panel"
       >
         {% csrf_token %}
@@ -63,18 +63,25 @@
   <hr />
   <div class="row">
     <div class="col-sm-5 col-md-6 review">
-      {% if restaurant.review_set.all %}
-        {% for review in restaurant.review_set.all %} 
-        <div class="review-container" style="border: 1px solid #bebebe; padding: 10px;">
-          <div class="review-user"> {{review.user.username}}</div>
-          <div class="review-rating"> {{review.stars}} stars</div>
-          <div class="review-comment"> {{review.comments}}</div>
-          <div class="review-img"> <img src="{{ review.img_url }}" style="max-width: 200px; height: 100px;"></div>
+      {% if restaurant.review_set.all %} {% for review in
+      restaurant.review_set.all %}
+      <div
+        class="review-container"
+        style="border: 1px solid #bebebe; padding: 10px"
+      >
+        <div class="review-user">{{review.user.username}}</div>
+        <div class="review-rating">{{review.stars}} stars</div>
+        <div class="review-comment">{{review.comments}}</div>
+        <div class="review-img">
+          <img
+            src="{{ review.img_url }}"
+            style="max-width: 200px; height: 100px"
+          />
         </div>
-        <br />
-        {% endfor %}
+      </div>
+      <br />
       {% else %}
-        <div>No reviews available.</div>
+      <div>No reviews available.</div>
       {% endif %}
     </div>
   </div>
@@ -129,33 +136,33 @@
 ></script>
 
 <script>
-  let map;
+    let map;
 
-  async function initMap() {
+    async function initMap() {
 
-    const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
+      const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
 
-    const { Map } = await google.maps.importLibrary("maps");
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      const { Map } = await google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
 
-    map = new Map(document.getElementById("map"), {
-      zoom: 14,
-      center: position,
-      mapId: "restaurant",
+      map = new Map(document.getElementById("map"), {
+        zoom: 14,
+        center: position,
+        mapId: "restaurant",
+      });
+
+
+
+    const marker = new AdvancedMarkerElement({
+      map: map,
+      position: position,
+      title: "restaurant",
     });
+  }
 
 
-
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
-    title: "restaurant",
-  });
-}
-
-
-  initMap();
+    initMap();
 </script>
 
 {% endblock %}

@@ -1,3 +1,5 @@
+import uuid
+import boto3
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -5,12 +7,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Review, Restaurant
+from .models import Review, Restaurant, Photo
 from .forms import ReviewForm
 from django.urls import reverse_lazy
 from decouple import config
 from .models import Restaurant
 import requests
+import os
 
 # Create your views here.
 def home(request):
@@ -48,6 +51,7 @@ def places_details(request, place_id):
   location= place_details.get('geometry').get('location')
   opening_hours= place_details.get('current_opening_hours')
   photos= place_details.get('photos', [])
+
   print(photos)
    # I dont think we need google places rating?
   # rating= place_details.get('rating') 
@@ -115,3 +119,20 @@ class ReviewUpdate(LoginRequiredMixin, UpdateView):
 class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review
   success_url = '/home'
+  
+def add_photo(request, review_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            bucket = os.environ['S3_BUCKET']
+            s3.upload_fileobj(photo_file, bucket, key)
+            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+
+            review = get_object_or_404(Review, id=review_id)
+            Photo.objects.create(url=url, review=review)
+        except Exception as e:
+            print('An error occurred uploading file to S3')
+            print(e)
+    return redirect('places_details', place_id=review.restaurant.place_id)

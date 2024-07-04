@@ -13,10 +13,10 @@
 
 <h3>Foodie's choice</h3>
 <br>
-<div id="details" class="row row-cols-1 row-cols-md-4 g-5">
+<div id="details" class="row row-cols-1 row-cols-md-3 g-4">
     {% for restaurant in restaurants %}
     <a href="{% url 'places_details' restaurant.place_id %}">
-        <div class="col mb-4 h-100">
+        <div class="col mb-3 h-100">
             <div class="card h-100">
                 <img src="{{ restaurant.photo_url }}" class="card-img-top" alt="restaurant cover">
                 <div class="card-body">

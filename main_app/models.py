@@ -32,3 +32,11 @@ class Review(models.Model):
   def __str__(self):
     return f"Review by {self.user.username} for {self.restaurant.name}"
 
+  
+class Photo(models.Model):
+  url = models.CharField(max_length=200)
+  restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+  
+  def __str__(self):
+    return f"Photo for restaurant_id: {self.restaurant_id} @{self.url}"
+

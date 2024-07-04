@@ -8,7 +8,7 @@ class Restaurant(models.Model):
    place_id = models.CharField(primary_key=True, max_length=50)
    name = models.CharField(max_length=50)
    address = models.TextField(max_length = 200)
-   opening_hours = models.TextField(max_length = 1000)
+   opening_hours = models.TextField(max_length = 1000, null=True, blank=True)
    location = models.CharField(max_length=100)
    photo_url = models.CharField(max_length=1000, default='')
    photo_reference = models.CharField(max_length=1000, default='')

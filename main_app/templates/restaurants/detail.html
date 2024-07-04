@@ -16,8 +16,8 @@
           name="rating"
           aria-label="Default select example"
         >
-
-          <option selected>Rate the restaurant</option>xs
+          <option selected>Rate the restaurant</option>
+          xs
           <option value="1">1 star</option>
           <option value="2">2 stars</option>
           <option value="3">3 stars</option>
@@ -35,12 +35,28 @@
           <label for="floatingTextarea">Leave a review here</label>
         </div>
         <br />
-        <button type="submit" class="btn btn-secondary">Upload Photo</button>
         <input type="submit" class="btn btn-primary" value="Leave a Review" />
+      </form>
+
+      {% for photo in restaurant.photo_set.all %}
+      <img class="responsive-img card-panel" src="{{photo.url}}" />
+      {% empty %}
+      <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+      {% endfor %}
+      <form
+        action="{% url 'add_photo' restaurant.place_id %}"
+        enctype="multipart/form-data"
+        method="POST"
+        class="card-panel"
+      >
+        {% csrf_token %}
+        <input type="file" name="photo-file" />
+        <br /><br />
+        <button type="submit" class="btn">Upload Photo</button>
       </form>
     </div>
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-      <div id="map" style="height: 400px; width: 100%;"></div>
+      <div id="map" style="height: 400px; width: 100%"></div>
     </div>
   </div>
   <br />
@@ -53,7 +69,41 @@
 </div>
 
 <script>
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+  ((g) => {
+    var h,
+      a,
+      k,
+      p = "The Google Maps JavaScript API",
+      c = "google",
+      l = "importLibrary",
+      q = "__ib__",
+      m = document,
+      b = window;
+    b = b[c] || (b[c] = {});
+    var d = b.maps || (b.maps = {}),
+      r = new Set(),
+      e = new URLSearchParams(),
+      u = () =>
+        h ||
+        (h = new Promise(async (f, n) => {
+          await (a = m.createElement("script"));
+          e.set("libraries", [...r] + "");
+          for (k in g)
+            e.set(
+              k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+              g[k]
+            );
+          e.set("callback", c + ".maps." + q);
+          a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+          d[q] = f;
+          a.onerror = () => (h = n(Error(p + " could not load.")));
+          a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+          m.head.append(a);
+        }));
+    d[l]
+      ? console.warn(p + " only loads once. Ignoring:", g)
+      : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+  })({
     key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
     v: "weekly",
     // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
@@ -61,39 +111,39 @@
   });
 </script>
 
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap">
-    
-</script>
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap"
+></script>
 
 <script>
-let map;
+  let map;
 
-async function initMap() {
+  async function initMap() {
 
-  const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
+    const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
 
-  const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-
-  map = new Map(document.getElementById("map"), {
-    zoom: 14,
-    center: position,
-    mapId: "restaurant",
-  });
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
 
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
+    map = new Map(document.getElementById("map"), {
+      zoom: 14,
+      center: position,
+      mapId: "restaurant",
+    });
 
-    title: "restaurant",
 
-  });
-}
+    const marker = new AdvancedMarkerElement({
+      map: map,
+      position: position,
 
-initMap();
+      title: "restaurant",
+
+    });
+  }
+
+  initMap();
 </script>
 
 {% endblock %}

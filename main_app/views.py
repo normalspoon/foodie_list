@@ -89,7 +89,9 @@ def places_details(request, place_id):
     
 
   
+
   return render(request, 'restaurants/detail.html', context)
+
 
 
 @login_required
@@ -107,7 +109,7 @@ class ReviewList(ListView):
 class ReviewCreate(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['comments', 'img_url', 'stars']
-    template_name = 'restaurants/detail.html'
+    template_name = 'restaurants/review_form.html'
 
     def form_valid(self, form):
         place_id = self.kwargs['place_id']

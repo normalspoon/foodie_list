@@ -1,5 +1,6 @@
 let autocomplete;
 function initMap() {
+
   console.log("hello")
   const center = { lat: 50.064192, lng: -130.605469 };
   // Create a bounding box with sides ~10km away from the center point
@@ -20,6 +21,7 @@ function initMap() {
   autocomplete = new google.maps.places.Autocomplete(input, options);
   autocomplete.setTypes(['restaurant', 'cafe']);
   autocomplete.addListener('place_changed', onPlaceChanged)
+
 
 
   function onPlaceChanged() {

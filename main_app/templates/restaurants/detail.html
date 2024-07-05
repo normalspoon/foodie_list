@@ -50,8 +50,9 @@
     <div class="card">
       <div class="row g-0">
         <div class="col-md-4">
-
-          <img src="{{ review.img_url }}" class="img-fluid rounded-start" alt="image" />
+          {% for photo in review.photo_set.all %}
+          <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
+          {% endfor %}
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -59,21 +60,19 @@
               <div class="avatar">
                 {{ review.user.username|slice:":2"|upper }}
               </div>
-
               <p class="card-text">{{review.user.username}}</p>
               <p class="card-text">
                 <small class="text-muted card-text">{{review.created_at|date:"d M Y h:i A"}}</small>
               </p>
-
               <div class="star-rating-display">
-                {% for i in "12345" %} {% if i|add:"0" <= review.stars %} <span class="star filled">★</span>
+                {% for i in "12345" %}
+                  {% if i|add:"0" <= review.stars %}
+                  <span class="star filled">★</span>
                   {% else %}
                   <span class="star">★</span>
-                  {% endif %} {% endfor %}
-
+                  {% endif %}
+                {% endfor %}
               </div>
-
-
 
               <p class="card-text">{{review.comments}}</p>
 

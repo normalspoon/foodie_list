@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Review, Photo
+from .models import Review
 
 class ReviewForm(ModelForm):
     photo = forms.ImageField(required=False)

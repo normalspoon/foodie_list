@@ -202,14 +202,17 @@ footer .social_icon li a:hover {
 
 .card{
   background-color: transparent;
-
 }
 .g-0{
   background-color: white;
 }
 .card-text{
   color:black;
+  display: inline-block;
+
 }
+
+
 .star-rating-display .star {
   color: #ddd;
   font-size: 1.5rem;
@@ -229,4 +232,11 @@ footer .social_icon li a:hover {
   line-height: 40px; 
   text-align: center;
   border-radius: 50%;
+  display: inline-block;
+}
+
+
+/* style for map */
+#map{
+  height:600px;
 }

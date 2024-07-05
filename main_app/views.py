@@ -78,10 +78,7 @@ def places_details(request, place_id):
     }
   )  
   
-  # retrive reviews ordered by creatd_at in descending order
-  # reviews = restaurant.review_set.all().order_by('-created_at')
-  
-  
+
   review_form = ReviewForm()
   
 

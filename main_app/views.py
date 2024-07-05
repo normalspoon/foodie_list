@@ -81,8 +81,9 @@ def places_details(request, place_id):
   # retrive reviews ordered by creatd_at in descending order
   # reviews = restaurant.review_set.all().order_by('-created_at')
   
-  # add review form
+  
   review_form = ReviewForm()
+  
 
   return render(request, 'restaurants/detail.html', {
     'place_details': place_details, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
@@ -96,6 +97,23 @@ def myLists(request):
 def myMap(request):
   return render(request, 'myMap.html')
 
+# add review form
+def add_review(request, place_id):
+# create a ModelForm instance using 
+# the data that was submitted in the form
+  form = ReviewForm(request.POST)
+# validate the form
+  if form.is_valid():
+    print('form is valid')
+  # We want a model instance, but
+  # we can't save to the db yet
+  # because we have not assigned the
+  # restaurant.place.id FK.
+    new_review = form.save(commit=False)
+    new_review.user = request.user
+    new_review.restaurant = get_object_or_404(Restaurant, place_id=place_id)
+    new_review.save()
+  return redirect('places_details', place_id=place_id)
 
 class ReviewList(ListView):
   model = Review
@@ -106,6 +124,7 @@ class ReviewCreate(LoginRequiredMixin, CreateView):
     template_name = 'restaurants/review_form.html'
 
     def form_valid(self, form):
+        print('valid form')
         place_id = self.kwargs['place_id']
         restaurant = get_object_or_404(Restaurant, place_id=place_id)
         form.instance.restaurant = restaurant
@@ -164,7 +183,7 @@ class ReviewUpdate(LoginRequiredMixin, UpdateView):
   
 class ReviewUpdate(LoginRequiredMixin, UpdateView):
   model = Review
-  fields = ['comments', 'img_url', 'stars']
+  fields = ['comments', 'stars']
   
 class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review

@@ -192,25 +192,3 @@ class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review
   success_url = '/home'
   
-@login_required
-def test_upload(request):
-    uploaded_url = None  # Initialize the variable here
-    if request.method == 'POST':
-        photo_file = request.FILES.get('photo', None)
-        if photo_file:
-            s3 = boto3.client('s3')
-            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-            try:
-                bucket = os.environ['S3_BUCKET']
-                base_url = os.environ['S3_BASE_URL']
-                print(f"Uploading {photo_file.name} to bucket {bucket} with key {key}")
-                s3.upload_fileobj(photo_file, bucket, key)
-                uploaded_url = f"{base_url}/{key}"
-                print(f"Uploaded to {uploaded_url}")
-            except Exception as e:
-                print('An error occurred uploading file to S3')
-                print(e)
-                return HttpResponse(f"Error: {e}", status=500)
-    
-    print(f"Rendering template with uploaded_url: {uploaded_url}")
-    return render(request, 'test_upload.html', {'uploaded_url': uploaded_url})

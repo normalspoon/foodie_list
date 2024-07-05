@@ -110,6 +110,20 @@ def add_review(request, place_id):
     new_review.user = request.user
     new_review.restaurant = get_object_or_404(Restaurant, place_id=place_id)
     new_review.save()
+    
+    photo_file = request.FILES.get('photo', None)
+    if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                bucket = config('S3_BUCKET')
+                s3.upload_fileobj(photo_file, bucket, key)
+                url = f"{config('S3_BASE_URL')}{key}"
+                Photo.objects.create(url=url, review=new_review)
+            except Exception as e:
+                print('An error occurred uploading file to S3')
+                print(e)
+    
   return redirect('places_details', place_id=place_id)
 
 class ReviewList(ListView):

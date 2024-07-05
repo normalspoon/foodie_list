@@ -6,7 +6,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-5 col-md-6">
-      <form method="POST">
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <select
           class="form-select"
@@ -14,7 +14,6 @@
           aria-label="Default select example"
         >
           <option selected>Rate the restaurant</option>
-          xs
           <option value="1">1 star</option>
           <option value="2">2 stars</option>
           <option value="3">3 stars</option>
@@ -25,31 +24,22 @@
         <div class="form-floating">
           <textarea
             class="form-control"
-            name="review"
+            name="comments"
             placeholder="Leave a review here"
             id="floatingTextarea"
           ></textarea>
           <label for="floatingTextarea">Leave a review here</label>
         </div>
         <br />
+        <input type="file" name="photo" />
+        <br />
         <input type="submit" class="btn btn-primary" value="Leave a Review" />
       </form>
       {% for photo in restaurant.photo_set.all %}
-      <img class="responsive-img card-panel" src="{{photo.url}}" />
+      <img class="responsive-img card-panel" src="{{ photo.url }}" />
       {% empty %}
       <div class="card-panel teal-text center-align">No Photos Uploaded</div>
       {% endfor %}
-      <form
-        action="{% url 'add_photo' restaurant.place_id %}"
-        enctype="multipart/form-data"
-        method="POST"
-        class="card-panel"
-      >
-        {% csrf_token %}
-        <input type="file" name="photo-file" />
-        <br /><br />
-        <button type="submit" class="btn">Upload Photo</button>
-      </form>
     </div>
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <div id="map" style="height: 400px; width: 100%"></div>
@@ -78,7 +68,6 @@
               <div class="avatar">
                 {{ review.user.username|slice:":2"|upper }}
               </div>
-
               <div class="star-rating-display">
                 {% for i in "12345" %} {% if i|add:"0" <= review.stars %}
                 <span class="star filled">★</span>
@@ -86,13 +75,12 @@
                 <span class="star">★</span>
                 {% endif %} {% endfor %}
               </div>
-
               <p>
                 <small class="text-muted card-text"
-                  >{{review.created_at|date:"d M Y h:i A"}}</small
+                  >{{ review.created_at|date:"d M Y h:i A" }}</small
                 >
               </p>
-              <p class="card-text">{{review.comments}}</p>
+              <p class="card-text">{{ review.comments }}</p>
             </div>
           </div>
         </div>
@@ -142,39 +130,34 @@
     })({
       key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
       v: "weekly",
-      // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
-      // Add other bootstrap parameters as needed, using camel case.
     });
   </script>
-
   <script
     async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap"
   ></script>
-
   <script>
-        let map;
+    let map;
 
-        async function initMap() {
+    async function initMap() {
+      const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
 
-          const position = { lat: {{ place_details.geometry.location.lat }
-        }, lng: { { place_details.geometry.location.lng } } };
+      const { Map } = await google.maps.importLibrary("maps");
+      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-        const { Map } = await google.maps.importLibrary("maps");
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-    	@@ -125,14 +162,21 @@ <h5 class="card-title">No reviews available.</h5>
-        });
+      map = new Map(document.getElementById("map"), {
+        center: position,
+        zoom: 15,
+      });
 
-
-        const marker = new AdvancedMarkerElement({
-          map: map,
-          position: position,
-          title: "restaurant",
-        });
+      const marker = new AdvancedMarkerElement({
+        map: map,
+        position: position,
+        title: "restaurant",
+      });
     }
 
-        initMap();
+    initMap();
   </script>
-
   {% endblock %}
 </div>

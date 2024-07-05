@@ -28,6 +28,7 @@ class Review(models.Model):
   stars = models.IntegerField(choices=RATING_CHOICES)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+  created_at = models.DateTimeField(auto_now_add=True)
   
   def __str__(self):
     return f"Review by {self.user.username} for {self.restaurant.name}"

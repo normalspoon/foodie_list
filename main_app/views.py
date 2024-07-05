@@ -126,6 +126,26 @@ def add_review(request, place_id):
     
   return redirect('places_details', place_id=place_id)
 
+
+def update_review(request, review_id):
+# create a ModelForm instance using 
+# the data that was submitted in the form
+  form = ReviewForm(request.POST)
+# validate the form
+  if form.is_valid():
+    print('form is valid')
+  # We want a model instance, but
+  # we can't save to the db yet
+  # because we have not assigned the
+  # restaurant.place.id FK.
+    updated_review = form.save(commit=False)
+    updated_review.user = request.user
+    updated_review.restaurant = get_object_or_404(Restaurant, review_id=review_id)
+    updated_review.comment = request.POST.get('comment')
+    updated_review.save()
+  return redirect('places_details', review_id=review_id)
+
+
 class ReviewList(ListView):
   model = Review
 

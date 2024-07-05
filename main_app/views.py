@@ -14,6 +14,8 @@ from decouple import config
 from .models import Restaurant
 import requests
 import os
+from django.http import HttpResponse
+
 
 # Create your views here.
 def home(request):
@@ -100,18 +102,65 @@ class ReviewList(ListView):
 
 class ReviewCreate(LoginRequiredMixin, CreateView):
     model = Review
-    fields = ['comments', 'img_url', 'stars']
+    form_class = ReviewForm
     template_name = 'restaurants/review_form.html'
 
     def form_valid(self, form):
         place_id = self.kwargs['place_id']
-        restaurant = get_object_or_404(Restaurant, place_id=place_id)  
+        restaurant = get_object_or_404(Restaurant, place_id=place_id)
         form.instance.restaurant = restaurant
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        photo_file = self.request.FILES.get('photo', None)
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                bucket = os.environ['S3_BUCKET']
+                s3.upload_fileobj(photo_file, bucket, key)
+                url = f"{os.environ['S3_BASE_URL']}{key}"
+                Photo.objects.create(url=url, review_id=self.object.id)
+                print(f"Photo uploaded to {url}")
+            except Exception as e:
+                print('An error occurred uploading file to S3')
+                print(e)
+
+        return response
 
     def get_success_url(self):
         return reverse_lazy('places_details', kwargs={'place_id': self.kwargs['place_id']})
+
+
+class ReviewUpdate(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'restaurants/review_form.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        photo_file = self.request.FILES.get('photo')
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                bucket = os.environ['S3_BUCKET']
+                print(f"Uploading {photo_file.name} to bucket {bucket} with key {key}")
+                s3.upload_fileobj(photo_file, bucket, key)
+                url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+                print(f"Uploaded to {url}")
+                Photo.objects.create(url=url, review_id=self.object.id)
+                print(f"Photo object created with URL: {url}")
+            except Exception as e:
+                print('An error occurred uploading file to S3')
+                print(e)
+
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy('places_details', kwargs={'place_id': self.object.restaurant.place_id})
+
   
 class ReviewUpdate(LoginRequiredMixin, UpdateView):
   model = Review
@@ -121,19 +170,23 @@ class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review
   success_url = '/home'
   
-def add_photo(request, review_id):
-    photo_file = request.FILES.get('photo-file', None)
-    if photo_file:
-        s3 = boto3.client('s3')
-        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-        try:
-            bucket = os.environ['S3_BUCKET']
-            s3.upload_fileobj(photo_file, bucket, key)
-            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
-
-            review = get_object_or_404(Review, id=review_id)
-            Photo.objects.create(url=url, review=review)
-        except Exception as e:
-            print('An error occurred uploading file to S3')
-            print(e)
-    return redirect('places_details', place_id=review.restaurant.place_id)
+@login_required
+def test_upload(request):
+    if request.method == 'POST':
+        photo_file = request.FILES.get('photo', None)
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                bucket = os.environ['S3_BUCKET']
+                base_url = os.environ['S3_BASE_URL']
+                print(f"Uploading {photo_file.name} to bucket {bucket} with key {key}")
+                s3.upload_fileobj(photo_file, bucket, key)
+                url = f"{base_url}/{key}"
+                print(f"Uploaded to {url}")
+                return HttpResponse(f"File uploaded to {url}")
+            except Exception as e:
+                print('An error occurred uploading file to S3')
+                print(e)
+                return HttpResponse(f"Error: {e}", status=500)
+    return render(request, 'test_upload.html')

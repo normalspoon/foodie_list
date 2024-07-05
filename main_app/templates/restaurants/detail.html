@@ -6,11 +6,10 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-5 col-md-6">
-      <form method="POST">
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <select class="form-select" name="rating" aria-label="Default select example">
           <option selected>Rate the restaurant</option>
-          xs
           <option value="1">1 star</option>
           <option value="2">2 stars</option>
           <option value="3">3 stars</option>
@@ -19,25 +18,23 @@
         </select>
         <br />
         <div class="form-floating">
+
           <textarea class="form-control" name="review" placeholder="Leave a review here"
             id="floatingTextarea"></textarea>
+
           <label for="floatingTextarea">Leave a review here</label>
         </div>
+        <br />
+        <input type="file" name="photo" />
         <br />
         <input type="submit" class="btn btn-primary" value="Leave a Review" />
       </form>
       {% for photo in restaurant.photo_set.all %}
-      <img class="responsive-img card-panel" src="{{photo.url}}" />
+      <img class="responsive-img card-panel" src="{{ photo.url }}" />
       {% empty %}
       <div class="card-panel teal-text center-align">No Photos Uploaded</div>
       {% endfor %}
-      <form action="{% url 'add_photo' restaurant.place_id %}" enctype="multipart/form-data" method="POST"
-        class="card-panel">
-        {% csrf_token %}
-        <input type="file" name="photo-file" />
-        <br /><br />
-        <button type="submit" class="btn">Upload Photo</button>
-      </form>
+
     </div>
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <div id="map" style="height: 400px; width: 100%"></div>
@@ -62,10 +59,12 @@
               <div class="avatar">
                 {{ review.user.username|slice:":2"|upper }}
               </div>
+
               <p class="card-text">{{review.user.username}}</p>
               <p>
                 <small class="text-muted card-text">{{review.created_at|date:"d M Y h:i A"}}</small>
               </p>
+
               <div class="star-rating-display">
                 {% for i in "12345" %} {% if i|add:"0" <= review.stars %} <span class="star filled">★</span>
                   {% else %}
@@ -75,7 +74,9 @@
               </div>
 
 
+
               <p class="card-text">{{review.comments}}</p>
+
             </div>
           </div>
         </div>
@@ -84,6 +85,7 @@
     </div>
     {% endfor %}
   </div>
+
   {% else %}
   <h5 class="card-title">No reviews available.</h5>
   {% endif %}
@@ -147,13 +149,16 @@
         center: position,
         zoom: 15,
       });
+
       const marker = new AdvancedMarkerElement({
         map: map,
         position: position,
         title: "restaurant",
       });
     }
+
     initMap();
   </script>
 
 {% endblock %}
+

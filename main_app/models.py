@@ -26,8 +26,6 @@ class Review(models.Model):
   comments = models.TextField()
   img_url = models.CharField(max_length=200)
   stars = models.IntegerField(choices=RATING_CHOICES)
-  created_at = models.DateTimeField(auto_now_add=True)
-   
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
   
@@ -36,9 +34,9 @@ class Review(models.Model):
 
   
 class Photo(models.Model):
-  url = models.CharField(max_length=200)
-  restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+  url = models.FileField(max_length=200)
+  review = models.ForeignKey(Review, on_delete=models.CASCADE)
   
   def __str__(self):
-    return f"Photo for restaurant_id: {self.restaurant_id} @{self.url}"
+    return f"Photo for review_id: {self.review_id} @{self.url}"
 

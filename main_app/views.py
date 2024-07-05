@@ -54,9 +54,6 @@ def places_details(request, place_id):
   opening_hours= place_details.get('current_opening_hours')
   photos= place_details.get('photos', [])
 
-  print(photos)
-   # I dont think we need google places rating?
-  # rating= place_details.get('rating') 
   
   photo_reference = None
   photo_url = None
@@ -77,14 +74,18 @@ def places_details(request, place_id):
       'opening_hours': opening_hours,
       'photo_reference': photo_reference,
       'photo_url': photo_url,
-      # 'rating': rating
+
     }
   )  
+  
+  # retrive reviews ordered by creatd_at in descending order
+  reviews = restaurant.review_set.all().order_by('-created_at')
+  
   # add review form
   review_form = ReviewForm()
 
   return render(request, 'restaurants/detail.html', {
-    'place_details': place_details, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
+    'place_details': place_details, 'reviews': reviews, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
     })
 
 @login_required

@@ -1,4 +1,8 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+
+
+
+
 <h2 id="details">{{ place_details.name }}</h2>
 <div id="details">{{ place_details.formatted_address }}</div>
 <br />
@@ -24,9 +28,10 @@
 
           <label for="floatingTextarea">Leave a review here</label>
         </div>
+    
+        <input type="file" class="btn btn-secondary" value="Add a Photo" name="photo" />
         <br />
-        <input type="file" name="photo" />
-        <br />
+        <br>
         <input type="submit" class="btn btn-primary" value="Leave a Review" />
       </form>
       {% for photo in restaurant.photo_set.all %}
@@ -43,16 +48,18 @@
   <br />
   <h3 id="details">Reviews</h3>
   <hr />
-
+  
   {% if restaurant.review_set.all %}
   <div class="card mb-3" style="max-width: 1000px">
     {% for review in restaurant.review_set.all %}
     <div class="card">
       <div class="row g-0">
         <div class="col-md-4">
+
           {% for photo in review.photo_set.all %}
           <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
           {% endfor %}
+
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -75,6 +82,28 @@
               </div>
 
               <p class="card-text">{{review.comments}}</p>
+
+              <p><button onclick="showEditForm({{ review.id }})">Edit</button></p>
+            </div>
+              
+              <div id="edit-{{ review.id }}" style="display: none;">
+                
+                <form method="post" action="{% url 'update_review' review.id %}">
+                    {% csrf_token %}
+                    Stars: <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
+                      <option selected>Rate the restaurant</option>
+                      <option value="1">1 star</option>
+                      <option value="2">2 stars</option>
+                      <option value="3">3 stars</option>
+                      <option value="4">4 stars</option>
+                      <option value="5">5 stars</option>
+                    </select>
+                    
+                    New Comment: <input type="text" name="comment" value="{{ review.comment }}" placeholder="New Comment here">
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
+                </form>
+            </div>
 
             </div>
           </div>
@@ -126,5 +155,18 @@
 
   initMap();
   </script>
+
+<script>
+  function showEditForm(reviewId) {
+      document.getElementById('display-' + reviewId).style.display = 'none';
+      document.getElementById('edit-' + reviewId).style.display = 'block';
+  }
+
+  function hideEditForm(reviewId) {
+      document.getElementById('edit-' + reviewId).style.display = 'none';
+      document.getElementById('display-' + reviewId).style.display = 'block';
+  }
+</script>
+
   {% endblock %}
 

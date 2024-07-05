@@ -78,7 +78,7 @@ def places_details(request, place_id):
     }
   )  
   
-
+  reviews = Review.objects.filter(restaurant=restaurant).prefetch_related('photo_set')
   review_form = ReviewForm()
   
 
@@ -96,35 +96,27 @@ def myMap(request):
 
 # add review form
 def add_review(request, place_id):
-# create a ModelForm instance using 
-# the data that was submitted in the form
-  form = ReviewForm(request.POST)
-# validate the form
-  if form.is_valid():
-    print('form is valid')
-  # We want a model instance, but
-  # we can't save to the db yet
-  # because we have not assigned the
-  # restaurant.place.id FK.
-    new_review = form.save(commit=False)
-    new_review.user = request.user
-    new_review.restaurant = get_object_or_404(Restaurant, place_id=place_id)
-    new_review.save()
-    
-    photo_file = request.FILES.get('photo', None)
-    if photo_file:
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        new_review = form.save(commit=False)
+        new_review.user = request.user
+        new_review.restaurant = get_object_or_404(Restaurant, place_id=place_id)
+        new_review.save()
+        
+        photo_file = request.FILES.get('photo', None)
+        if photo_file:
             s3 = boto3.client('s3')
             key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
             try:
-                bucket = config('S3_BUCKET')
+                bucket = os.environ['S3_BUCKET']
+                base_url = os.environ['S3_BASE_URL']
                 s3.upload_fileobj(photo_file, bucket, key)
-                url = f"{config('S3_BASE_URL')}{key}"
+                url = f"{base_url}/{key}"
                 Photo.objects.create(url=url, review=new_review)
             except Exception as e:
-                print('An error occurred uploading file to S3')
-                print(e)
+                return HttpResponse(f"Error: {e}", status=500)
     
-  return redirect('places_details', place_id=place_id)
+    return redirect('places_details', place_id=place_id)
 
 
 def update_review(request, review_id):
@@ -220,23 +212,3 @@ class ReviewDelete(LoginRequiredMixin, DeleteView):
   model = Review
   success_url = '/home'
   
-@login_required
-def test_upload(request):
-    if request.method == 'POST':
-        photo_file = request.FILES.get('photo', None)
-        if photo_file:
-            s3 = boto3.client('s3')
-            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-            try:
-                bucket = os.environ['S3_BUCKET']
-                base_url = os.environ['S3_BASE_URL']
-                print(f"Uploading {photo_file.name} to bucket {bucket} with key {key}")
-                s3.upload_fileobj(photo_file, bucket, key)
-                url = f"{base_url}/{key}"
-                print(f"Uploaded to {url}")
-                return HttpResponse(f"File uploaded to {url}")
-            except Exception as e:
-                print('An error occurred uploading file to S3')
-                print(e)
-                return HttpResponse(f"Error: {e}", status=500)
-    return render(request, 'test_upload.html')

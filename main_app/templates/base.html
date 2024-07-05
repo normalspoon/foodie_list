@@ -13,7 +13,6 @@
       type="text/css"
       href="{% static 'css/style.css' %}"
     />
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <title>Foodie list</title>
   </head>
   <body>
@@ -66,8 +65,6 @@
       </nav>
     </header>
     <main class="container">
-      <!-- Debugging - Remove on launch -->
-      <p>User is authenticated: {{ user.is_authenticated }}</p>
       {% block content %} {% endblock %}
     </main>
     <footer>

@@ -24,9 +24,10 @@
 
           <label for="floatingTextarea">Leave a review here</label>
         </div>
+    
+        <input type="file" class="btn btn-secondary" value="Add a Photo" name="photo" />
         <br />
-        <input type="file" name="photo" />
-        <br />
+        <br>
         <input type="submit" class="btn btn-primary" value="Leave a Review" />
       </form>
       {% for photo in restaurant.photo_set.all %}

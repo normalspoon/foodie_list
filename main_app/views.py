@@ -78,14 +78,11 @@ def places_details(request, place_id):
     }
   )  
   
-  # retrive reviews ordered by creatd_at in descending order
-  reviews = restaurant.review_set.all().order_by('-created_at')
-  
   # add review form
   review_form = ReviewForm()
 
   return render(request, 'restaurants/detail.html', {
-    'place_details': place_details, 'reviews': reviews, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
+    'place_details': place_details, 'review_form': review_form, 'api_key': api_key, 'restaurant': restaurant
     })
 
 @login_required

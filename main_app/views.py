@@ -78,6 +78,7 @@ def places_details(request, place_id):
     }
   )  
   
+
   # add review form
   review_form = ReviewForm()
 

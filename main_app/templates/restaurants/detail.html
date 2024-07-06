@@ -22,9 +22,13 @@
         </select>
         <br />
         <div class="form-floating">
-          <textarea class="form-control" name="comments" placeholder="Leave a review here" id="floatingTextarea"></textarea>
+
+          <textarea class="form-control" name="comments" placeholder="Leave a review here"
+            id="floatingTextarea"></textarea>
+
           <label for="floatingTextarea">Leave a review here</label>
         </div>
+    
         <input type="file" class="btn btn-secondary" value="Add a Photo" name="photo" />
         <br />
         <br>
@@ -35,6 +39,7 @@
       {% empty %}
       <div class="card-panel teal-text center-align">No Photos Uploaded</div>
       {% endfor %}
+
     </div>
     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
       <div id="map" style="height: 400px; width: 100%"></div>
@@ -51,10 +56,11 @@
       <div class="row g-0">
         <div class="col-md-4">
           <div id="display-{{ review.id }}">
-            {% for photo in review.photo_set.all %}
-            <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
-            {% endfor %}
-          </div>
+
+          {% for photo in review.photo_set.all %}
+          <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
+          {% endfor %}
+
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -75,40 +81,53 @@
                   {% endif %}
                 {% endfor %}
               </div>
+
               <p class="card-text">{{review.comments}}</p>
+
               <button onclick="showEditForm({{ review.id }})" class="btn btn-light">Edit</button>
             </div>
-            <div id="edit-{{ review.id }}" style="display: none;">
-              <form method="post" action="{% url 'update_review' review.id %}">
-                {% csrf_token %}
-                <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
-                  <option selected>New Rating</option>
-                  <option value="1">1 star</option>
-                  <option value="2">2 stars</option>
-                  <option value="3">3 stars</option>
-                  <option value="4">4 stars</option>
-                  <option value="5">5 stars</option>
-                </select>
-                New Comment: <input type="text" name="comments" value="{{ review.comments }}" placeholder="New Comment here">
-                <input type="hidden" name="review_id" value="{{ review.id }}">
-                <button class="btn btn-primary" type="submit">Save</button>
-                <button class="btn btn-light" type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
-              </form>
-              <form method="post" action="{% url 'delete_review' review.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="review_id" value="{{ review.id }}">
-                <button class="btn btn-danger" type="submit">Delete Review</button>
-              </form>
+              
+              <div id="edit-{{ review.id }}" style="display: none;">
+                
+                <form method="post" action="{% url 'update_review' review.id %}">
+                    {% csrf_token %}
+                    <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
+                      <option selected>New Rating</option>
+                      <option value="1">1 star</option>
+                      <option value="2">2 stars</option>
+                      <option value="3">3 stars</option>
+                      <option value="4">4 stars</option>
+                      <option value="5">5 stars</option>
+                    </select>
+                    
+                    New Comment: <input type="text" name="comments" value="{{ review.comments }}" placeholder="New Comment here">
+                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-light" type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
+                </form>
+
+                <form method="post" action="{% url 'delete_review' review.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="review_id" value="{{ review.id }}">
+                  <button class="btn btn-danger" type="submit">Delete Review</button>
+                </form>
+
+            </div>
+
             </div>
           </div>
         </div>
-      </div>
+      
+
     </div>
     {% endfor %}
   </div>
+
   {% else %}
   <h5 class="card-title">No reviews available.</h5>
   {% endif %}
+
+
 </div>
 
 

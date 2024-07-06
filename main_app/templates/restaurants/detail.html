@@ -91,8 +91,8 @@
                 
                 <form method="post" action="{% url 'update_review' review.id %}">
                     {% csrf_token %}
-                    Stars: <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
-                      <option selected>Rate the restaurant</option>
+                    <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
+                      <option selected>New Rating</option>
                       <option value="1">1 star</option>
                       <option value="2">2 stars</option>
                       <option value="3">3 stars</option>
@@ -105,6 +105,13 @@
                     <button type="submit">Save</button>
                     <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
                 </form>
+
+                <form method="post" action="{% url 'delete_review' review.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="review_id" value="{{ review.id }}">
+                  <button type="submit">Delete Review</button>
+                </form>
+
             </div>
 
             </div>

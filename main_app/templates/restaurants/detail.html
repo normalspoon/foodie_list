@@ -99,7 +99,8 @@
                       <option value="5">5 stars</option>
                     </select>
                     
-                    New Comment: <input type="text" name="comment" value="{{ review.comment }}" placeholder="New Comment here">
+                    New Comment: <input type="text" name="comments" value="{{ review.comments }}" placeholder="New Comment here">
+                    <input type="hidden" name="review_id" value="{{ review.id }}">
                     <button type="submit">Save</button>
                     <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
                 </form>
@@ -158,12 +159,12 @@
 
 <script>
   function showEditForm(reviewId) {
-      document.getElementById('display-' + reviewId).style.display = 'none';
+      // document.getElementById('display-' + reviewId).style.display = 'none';
       document.getElementById('edit-' + reviewId).style.display = 'block';
   }
 
   function hideEditForm(reviewId) {
-      document.getElementById('edit-' + reviewId).style.display = 'none';
+      // document.getElementById('edit-' + reviewId).style.display = 'none';
       document.getElementById('display-' + reviewId).style.display = 'block';
   }
 </script>

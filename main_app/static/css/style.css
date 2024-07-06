@@ -203,8 +203,16 @@ footer .social_icon li a:hover {
   --bs-btn-active-border-color: #a38231;
 }
 
+.reivew{
+  position: relative;
+}
+
 .btn-light{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
   align-self: flex-end;
+  --bs-btn-bg:#cccccc;
 }
 
 .card{
@@ -242,6 +250,7 @@ footer .social_icon li a:hover {
   border-radius: 50%;
   display: inline-block;
 }
+
 
 
 /* style for map */

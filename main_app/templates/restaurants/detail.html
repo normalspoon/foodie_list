@@ -164,8 +164,7 @@
   <script>
     let map;
     async function initMap() {
-      const position = { lat: {{ place_details.geometry.location.lat }
-    }, lng: { { place_details.geometry.location.lng } } };
+      const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
     map = new Map(document.getElementById("map"), {

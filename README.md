@@ -21,7 +21,7 @@ An app to find your favourite and top rated restuarants
 
 # Getting Started
 
-(your deployment url here)
+- Deployment URL: https://mysite-vl4o.onrender.com
 - Trello Board: https://trello.com/b/rmQw5OSe/application-progression-board
 - Pitch Deck Link: 
 - ERD

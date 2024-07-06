@@ -182,6 +182,9 @@ footer .social_icon li a:hover {
 
 
 /* style for detail page */
+
+
+
 .btn-primary {
   background-color: #F36038;
   border-color: #F36038;
@@ -198,6 +201,10 @@ footer .social_icon li a:hover {
   --bs-btn-hover-border-color: #e1b545;
   --bs-btn-active-bg: #a38231;
   --bs-btn-active-border-color: #a38231;
+}
+
+.btn-light{
+  align-self: flex-end;
 }
 
 .card{

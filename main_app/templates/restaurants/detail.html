@@ -102,14 +102,14 @@
                     
                     New Comment: <input type="text" name="comments" value="{{ review.comments }}" placeholder="New Comment here">
                     <input type="hidden" name="review_id" value="{{ review.id }}">
-                    <button type="submit">Save</button>
-                    <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-light" type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
                 </form>
 
                 <form method="post" action="{% url 'delete_review' review.id %}">
                   {% csrf_token %}
                   <input type="hidden" name="review_id" value="{{ review.id }}">
-                  <button type="submit">Delete Review</button>
+                  <button class="btn btn-danger" type="submit">Delete Review</button>
                 </form>
 
             </div>

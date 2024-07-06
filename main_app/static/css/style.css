@@ -211,7 +211,13 @@ footer .social_icon li a:hover {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  align-self: flex-end;
+  --bs-btn-bg:#cccccc;
+}
+
+.btn-light-revise{
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
   --bs-btn-bg:#cccccc;
 }
 

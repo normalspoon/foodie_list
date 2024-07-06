@@ -42,10 +42,12 @@ GOOGLE_API_KEY= os.environ['GOOGLE_API_KEY']
 SECRET_KEY = 'django-insecure-*=)l89varyk78p4b8qj3da2jj$=8ni-ii#%i_lh4*e=#x$8jov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
-
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -95,12 +97,19 @@ WSGI_APPLICATION = 'foodie_list_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'foodie_list',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'foodie_list',
         
-    }
+#     }
+# }
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default= os.environ['DATABASE_URL'],
+        conn_max_age=600
+    )
 }
 
 
@@ -144,7 +153,7 @@ USE_TZ = True
 # STATIC_URL = '/static/'
 # STATICFILES_DIRS = [BASE_DIR / "static"]
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -152,11 +161,15 @@ STATIC_URL = 'static/'
 # This setting informs Django of the URI path from which your static files will be served to users
 # Here, they well be accessible at your-domain.onrender.com/static/... or yourcustomdomain.com/static/...
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 if not DEBUG:
 
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+    PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
 
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

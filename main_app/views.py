@@ -151,6 +151,23 @@ def update_review(request, review_id):
   return redirect('places_details', place_id=restaurant_place_id)
 
 
+def delete_review(request, review_id):
+  form = ReviewForm(request.POST)
+  review_id = request.POST.get('review_id');
+  print('review_id', review_id)
+  review = Review.objects.get(id=review_id)
+  print('review', review)
+  restaurant = review.restaurant
+  print('restaurant', restaurant)
+  restaurant_place_id = restaurant.place_id
+  print('restaurant_place_id', restaurant_place_id)
+  print(request.POST)
+  # review = get_object_or_404(review, review_id)
+  review.delete()
+  return redirect('places_details', place_id=restaurant_place_id)
+
+
+
 class ReviewList(ListView):
   model = Review
 

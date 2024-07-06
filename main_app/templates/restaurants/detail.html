@@ -56,7 +56,6 @@
       <div class="row g-0">
         <div class="col-md-4">
           <div id="display-{{ review.id }}">
-
             {% for photo in review.photo_set.all %}
             <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
             {% endfor %}
@@ -117,21 +116,13 @@
 
           </div>
         </div>
-
-
-
       </div>
-      {% endfor %}
     </div>
-
-    {% else %}
-    <h5 class="card-title">No reviews available.</h5>
-    {% endif %}
-
-
+    {% endfor %}
   </div>
-
-
+  {% else %}
+  <h5 class="card-title">No reviews available.</h5>
+  {% endif %}
 
 
   <script>

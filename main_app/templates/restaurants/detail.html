@@ -28,7 +28,7 @@
 
           <label for="floatingTextarea">Leave a review here</label>
         </div>
-    
+
         <input type="file" class="btn btn-secondary" value="Add a Photo" name="photo" />
         <br />
         <br>
@@ -48,7 +48,7 @@
   <br />
   <h3 id="details">Reviews</h3>
   <hr />
-  
+
   {% if restaurant.review_set.all %}
   <div class="card mb-3" style="max-width: 1000px">
     {% for review in restaurant.review_set.all %}
@@ -57,10 +57,10 @@
         <div class="col-md-4">
           <div id="display-{{ review.id }}">
 
-          {% for photo in review.photo_set.all %}
-          <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
-          {% endfor %}
-
+            {% for photo in review.photo_set.all %}
+            <img src="{{ photo.url }}" class="img-fluid rounded-start" alt="Review Image" />
+            {% endfor %}
+          </div>
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -74,72 +74,74 @@
               </p>
               <div class="star-rating-display">
                 {% for i in "12345" %}
-                  {% if i|add:"0" <= review.stars %}
-                  <span class="star filled">★</span>
+                {% if i|add:"0" <= review.stars %} <span class="star filled">★</span>
                   {% else %}
                   <span class="star">★</span>
                   {% endif %}
-                {% endfor %}
+                  {% endfor %}
               </div>
 
               <p class="card-text">{{review.comments}}</p>
 
               <button onclick="showEditForm({{ review.id }})" class="btn btn-light">Edit</button>
             </div>
-              
-              <div id="edit-{{ review.id }}" style="display: none;">
-                
-                <form method="post" action="{% url 'update_review' review.id %}">
-                    {% csrf_token %}
-                    Stars: <select class="form-select" name="stars" aria-label="Default select example" placeholder="{{ review.stars }}">
-                      <option selected>Rate the restaurant</option>
-                      <option value="1">1 star</option>
-                      <option value="2">2 stars</option>
-                      <option value="3">3 stars</option>
-                      <option value="4">4 stars</option>
-                      <option value="5">5 stars</option>
-                    </select>
-                    
-                    New Comment: <input type="text" name="comments" value="{{ review.comments }}" placeholder="New Comment here">
-                    <input type="hidden" name="review_id" value="{{ review.id }}">
-                    <button type="submit">Save</button>
-                    <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
-                </form>
+
+            <div id="edit-{{ review.id }}" style="display: none;">
+
+              <form method="post" action="{% url 'update_review' review.id %}">
+                {% csrf_token %}
+                Stars: <select class="form-select" name="stars" aria-label="Default select example"
+                  placeholder="{{ review.stars }}">
+                  <option selected>Rate the restaurant</option>
+                  <option value="1">1 star</option>
+                  <option value="2">2 stars</option>
+                  <option value="3">3 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="5">5 stars</option>
+                </select>
+
+                New Comment: <input type="text" name="comments" value="{{ review.comments }}"
+                  placeholder="New Comment here">
+                <input type="hidden" name="review_id" value="{{ review.id }}">
+                <button type="submit">Save</button>
+                <button type="button" onclick="hideEditForm({{ review.id }})">Cancel</button>
+              </form>
             </div>
 
-            </div>
           </div>
         </div>
-      
 
+
+
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+
+    {% else %}
+    <h5 class="card-title">No reviews available.</h5>
+    {% endif %}
+
   </div>
 
-  {% else %}
-  <h5 class="card-title">No reviews available.</h5>
-  {% endif %}
 
-</div>
-
-
-<script>
-  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
-    v: "weekly",
-    // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
-    // Add other bootstrap parameters as needed, using camel case.
-  });
-</script>
-
-<script async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap"></script>
-</script>
-  
   <script>
-  let map;
-  async function initMap() {
-    const position = { lat: {{ place_details.geometry.location.lat }}, lng: {{ place_details.geometry.location.lng }} };
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+      key: "AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw",
+      v: "weekly",
+      // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+      // Add other bootstrap parameters as needed, using camel case.
+    });
+  </script>
+
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOA6qch2_Mkktzr1mbL0RCAw9nrkcMxZw&loading=async&libraries=places&callback=initMap"></script>
+  </script>
+
+  <script>
+    let map;
+    async function initMap() {
+      const position = { lat: {{ place_details.geometry.location.lat }
+    }, lng: { { place_details.geometry.location.lng } } };
     const { Map } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
     map = new Map(document.getElementById("map"), {
@@ -155,20 +157,19 @@
     });
   }
 
-  initMap();
+    initMap();
   </script>
 
-<script>
-  function showEditForm(reviewId) {
+  <script>
+    function showEditForm(reviewId) {
       document.getElementById('display-' + reviewId).style.display = 'none';
       document.getElementById('edit-' + reviewId).style.display = 'block';
-  }
+    }
 
-  function hideEditForm(reviewId) {
+    function hideEditForm(reviewId) {
       document.getElementById('edit-' + reviewId).style.display = 'none';
       document.getElementById('display-' + reviewId).style.display = 'block';
-  }
-</script>
+    }
+  </script>
 
   {% endblock %}
-
